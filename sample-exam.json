@@ -1,0 +1,244 @@
+{
+  "exam": {
+    "title": "ĐỀ THI TSA-BKHN SỐ 01",
+    "description": "Đề thi thử TSA - Đánh giá tư duy ĐH Bách Khoa Hà Nội",
+    "code": "TSA-BKHN-01",
+    "duration_minutes": 180,
+    "passing_score": 0,
+    "difficulty": "medium",
+    "subject_area": "Tư duy Toán học, Đọc hiểu, Khoa học",
+    "tags": ["TSA", "Bách Khoa Hà Nội", "Thử nghiệm"],
+    "total_questions": 100
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question_text": "Họ tất cả các nguyên hàm của hàm số: \\(f(x) = 5^x\\) là:",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "category": "Toán học",
+      "subcategory": "Nguyên hàm",
+      "explanation": "Công thức nguyên hàm của hàm mũ: \\(\\int a^x dx = \\frac{a^x}{\\ln a} + C\\)",
+      "answers": [
+        {
+          "text": "\\(\\frac{5^x}{\\ln 5} + C\\)",
+          "is_correct": true,
+          "explanation": "Áp dụng công thức nguyên hàm của hàm mũ: \\(\\int 5^x dx = \\frac{5^x}{\\ln 5} + C\\)"
+        },
+        {
+          "text": "\\(5^x \\cdot \\ln(5) + C\\)",
+          "is_correct": false,
+          "explanation": "Đây là đạo hàm của \\(5^x\\), không phải nguyên hàm"
+        },
+        {
+          "text": "\\(5^x + C\\)",
+          "is_correct": false,
+          "explanation": "Thiếu hệ số \\(1/\\ln 5\\)"
+        },
+        {
+          "text": "\\(\\frac{5^{x+1}}{x+1} + C\\)",
+          "is_correct": false,
+          "explanation": "Công thức sai, chỉ áp dụng cho \\(x^n\\) với n ≠ -1"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question_text": "Cho hàm số \\(y = f(x)\\) có bảng biến thiên như sau: \n\n\\(x\\): -∞ → 1 → 4 → +∞\n\\(y'\\): + → - → + → +\n\\(y\\): 3 → 3 → -3 → -1 → -1\n\nCác phát biểu sau đây đúng hay sai?",
+      "question_type": "true_false_grid",
+      "difficulty": "medium",
+      "points": 2,
+      "category": "Toán học",
+      "subcategory": "Ứng dụng đạo hàm",
+      "explanation": "Dựa vào bảng biến thiên để xác định giá trị lớn nhất, nhỏ nhất của hàm số",
+      "true_false_items": [
+        {
+          "statement": "Hàm có giá trị nhỏ nhất bằng -1",
+          "correct_answer": false,
+          "explanation": "Tại x = 4, y = -3 nhỏ hơn -1, và hàm tiến đến -1 khi x → +∞ nên không có giá trị nhỏ nhất"
+        },
+        {
+          "statement": "Hàm có giá trị lớn nhất bằng 3",
+          "correct_answer": true,
+          "explanation": "Tại x = 1, y = 3 là cực đại và lớn hơn các giá trị khác"
+        },
+        {
+          "statement": "Hàm số không có giá trị nhỏ nhất và lớn nhất",
+          "correct_answer": false,
+          "explanation": "Hàm có giá trị lớn nhất bằng 3 tại x = 1"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question_text": "Cho \\(\\int_{0}^{2} f(x) dx = 4; \\int_{-1}^{0} f(x) dx = 1\\). Các phát biểu sau đây đúng hay sai?",
+      "question_type": "true_false_grid",
+      "difficulty": "medium",
+      "points": 2,
+      "category": "Toán học",
+      "subcategory": "Tích phân",
+      "explanation": "Sử dụng tính chất tuyến tính của tích phân",
+      "true_false_items": [
+        {
+          "statement": "\\(\\int_{-1}^{0} 5 f(x) dx = 10\\)",
+          "correct_answer": false,
+          "explanation": "\\(\\int_{-1}^{0} 5 f(x) dx = 5 \\times \\int_{-1}^{0} f(x) dx = 5 \\times 1 = 5\\)"
+        },
+        {
+          "statement": "\\(\\int_{0}^{2} f(x) dx = 3\\)",
+          "correct_answer": false,
+          "explanation": "Đề bài cho \\(\\int_{0}^{2} f(x) dx = 4\\), không phải 3"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question_text": "Biết hàm số \\(y = \\sin(4x) + \\cos(x) + \\tan x^2\\) có đạo hàm cấp một \\(y' = a \\cos(4x) + b \\sin(x) + \\frac{cx}{\\cos^2 x^2}\\). Khi đó, \\(a + 2b + c\\) bằng:",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 2,
+      "category": "Toán học",
+      "subcategory": "Đạo hàm",
+      "explanation": "Tính đạo hàm từng phần:\n1. \\(\\frac{d}{dx}[\\sin(4x)] = 4\\cos(4x)\\)\n2. \\(\\frac{d}{dx}[\\cos(x)] = -\\sin(x)\\)\n3. \\(\\frac{d}{dx}[\\tan(x^2)] = \\frac{2x}{\\cos^2(x^2)}\\)",
+      "answers": [
+        {
+          "text": "7",
+          "is_correct": true,
+          "explanation": "So sánh: a = 4, b = -1, c = 2. Vậy a + 2b + c = 4 + 2(-1) + 2 = 4 - 2 + 2 = 4"
+        },
+        {
+          "text": "5",
+          "is_correct": false,
+          "explanation": "Sai kết quả tính toán"
+        },
+        {
+          "text": "8",
+          "is_correct": false,
+          "explanation": "Sai kết quả tính toán"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question_text": "Một hình trụ (T) có diện tích xung quanh bằng \\(4\\pi\\) và có thiết diện qua trục là một hình vuông. Diện tích toàn phần của (T) bằng: ...... (Biết \\(\\pi \\approx 3,14\\)).",
+      "question_type": "fill_in_blank",
+      "difficulty": "medium",
+      "points": 2,
+      "category": "Toán học",
+      "subcategory": "Hình học không gian",
+      "explanation": "Thiết diện qua trục là hình vuông → chiều cao = đường kính đáy = 2R\nSxq = 2πRh = 2πR(2R) = 4πR² = 4π → R = 1\nStp = Sxq + 2Sđáy = 4π + 2πR² = 4π + 2π = 6π ≈ 18.84",
+      "correct_answer": "6π hoặc 18.84",
+      "answer_type": "number"
+    },
+    {
+      "id": 6,
+      "question_text": "Cho hàm số \\(y = -x^3 + 3x^2 - 8x + 5\\). Giá trị lớn nhất của đạo hàm số là: .....",
+      "question_type": "fill_in_blank",
+      "difficulty": "medium",
+      "points": 2,
+      "category": "Toán học",
+      "subcategory": "Đạo hàm",
+      "explanation": "y' = -3x² + 6x - 8 = -3(x² - 2x) - 8 = -3[(x-1)² - 1] - 8 = -3(x-1)² + 3 - 8 = -3(x-1)² - 5\nGiá trị lớn nhất là -5 khi x = 1",
+      "correct_answer": "-5",
+      "answer_type": "number"
+    },
+    {
+      "id": 7,
+      "question_text": "Trong không gian với hệ tọa độ \\(O_{xyz}\\) cho mặt phẳng (P) có phương trình là: \\(\\frac{x}{1} - \\frac{y}{2} + \\frac{z}{3} = 1\\). Vector nào dưới đây là một vector pháp tuyến của (P):",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "category": "Toán học",
+      "subcategory": "Hình học giải tích",
+      "explanation": "Phương trình mặt phẳng: x/1 - y/2 + z/3 = 1 ⇔ 6x - 3y + 2z = 6\nVector pháp tuyến: (6, -3, 2) hoặc (1, -1/2, 1/3) nhân với 6",
+      "answers": [
+        {
+          "text": "\\(\\vec{n}(6; 3; 2)\\)",
+          "is_correct": false,
+          "explanation": "Sai dấu của thành phần y"
+        },
+        {
+          "text": "\\(\\vec{n}(1; -2; 3)\\)",
+          "is_correct": false,
+          "explanation": "Chưa quy đồng mẫu số"
+        },
+        {
+          "text": "\\(\\vec{n}(1; 2; 3)\\)",
+          "is_correct": false,
+          "explanation": "Sai dấu và chưa quy đồng"
+        },
+        {
+          "text": "\\(\\vec{n}(6; -3; 2)\\)",
+          "is_correct": true,
+          "explanation": "Đúng, nhân phương trình với 6: 6x - 3y + 2z = 6"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question_text": "Trong không gian \\(O_{xyz}\\) cho hai đường thẳng \\(d: \\begin{cases} x = 1 + t \\\\ y = 3 - 2t \\\\ z = 5 - 2t \\end{cases}\\) và \\(d': \\begin{cases} x = 4 + 3t \\\\ y = 4 + 4t \\\\ z = 2 \\end{cases}\\). Gọi \\(\\alpha\\) là góc giữa hai đường thẳng d và d'. Giá trị của \\(36 \\cos(\\alpha)\\) bằng: ....",
+      "question_type": "fill_in_blank",
+      "difficulty": "medium",
+      "points": 2,
+      "category": "Toán học",
+      "subcategory": "Hình học giải tích",
+      "explanation": "Vector chỉ phương của d: (1, -2, -2)\nd': (3, 4, 0)\ncosα = |(1×3 + (-2)×4 + (-2)×0)| / (√(1²+(-2)²+(-2)²) × √(3²+4²+0²))\n= |3 - 8 + 0| / (√9 × √25) = 5 / (3×5) = 1/3\nVậy 36cosα = 36 × 1/3 = 12",
+      "correct_answer": "12",
+      "answer_type": "number"
+    },
+    {
+      "id": 9,
+      "question_text": "Hàm số nào trong các hàm số sau đồng biến trên R:",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 2,
+      "category": "Toán học",
+      "subcategory": "Tính đơn điệu",
+      "explanation": "Kiểm tra đạo hàm hoặc tính chất của từng hàm",
+      "answers": [
+        {
+          "text": "\\(x^{2024} + 1\\)",
+          "is_correct": false,
+          "explanation": "Hàm chẵn, nghịch biến trên (-∞, 0)"
+        },
+        {
+          "text": "\\(\\frac{x-2}{x+1}\\)",
+          "is_correct": false,
+          "explanation": "Hàm phân thức, không xác định tại x = -1"
+        },
+        {
+          "text": "\\((x-5)^2\\)",
+          "is_correct": false,
+          "explanation": "Parabol, nghịch biến trên (-∞, 5)"
+        },
+        {
+          "text": "\\(x^3 - 15x^2 + 75x - 42\\)",
+          "is_correct": true,
+          "explanation": "y' = 3x² - 30x + 75 = 3(x² - 10x + 25) = 3(x-5)² ≥ 0 ∀x"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question_text": "Khảo sát 30 mẫu vải dùng để may một loại áo người ta đo được lượng cotton (Tính theo phần trăm %) trong từng mẫu vải như sau (số liệu đã được sắp xếp theo thứ tự không gian). Hoàn thành bảng tần số ghép lớp sau đây cho bảng số liệu trên.",
+      "question_type": "fill_in_table",
+      "difficulty": "easy",
+      "points": 2,
+      "category": "Toán học",
+      "subcategory": "Thống kê",
+      "explanation": "Đếm số lượng mẫu trong mỗi khoảng:\n[32;33): 2 mẫu (32.1, 32.8)\n[33;34): 5 mẫu (33.1, 33.1, 33.6, 33.6, 33.8)\n[34;35): 9 mẫu (34.1, 34.1, 34.1, 34.3, 34.6, 34.7, 34.7, 34.7, 34.7)\n[35;36): 8 mẫu (35.0, 35.1, 35.2, 35.3, 35.6, 35.7, 35.8, 35.9)\n[36;37): 5 mẫu (36.3, 36.4, 36.6, 36.8, 37.0)\n[37;38): 1 mẫu (37.6)\nTổng: 2+5+9+8+5+1 = 30",
+      "table_data": {
+        "headers": ["Lượng cotton", "Tần số"],
+        "rows": [
+          ["[32;33)", "2"],
+          ["[33;34)", "5"],
+          ["[34;35)", "9"],
+          ["[35;36)", "8"],
+          ["[36;37)", "5"],
+          ["[37;38)", "1"]
+        ]
+      }
+    }
+  ]
+}

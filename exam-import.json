@@ -1,0 +1,91 @@
+{
+  "title": "Đề Thi Thử - Khóa Học Khác (KH đề 1)",
+  "description": "Bộ câu hỏi trắc nghiệm từ đề thi thử về Vật lý và Hóa học",
+  "questionCount": 40,
+  "durationMinutes": 120,
+  "questions": [
+    {
+      "id": "q001",
+      "type": "multiple_choice",
+      "category": "Problem Solving",
+      "difficulty": "Trung bình",
+      "text": "Tại các khúc cua trên đèo, người ta thường gắn một dụng cụ để tài xế có thể dễ dàng quan sát ở phía bên kia khúc cua với vùng nhìn thấy rộng. Dụng cụ đó là?",
+      "image": "https://pub-dcf75ca5a61b4d1fa3a55cce51b3fd56.r2.dev/he-thong-thi-rsa/1e9699df-6fe4-420e-92fb-b2965deea247.png",
+      "options": [
+        "gương cầu lồi",
+        "gương cầu lõm",
+        "gương phẳng",
+        "thấu kính hội tụ"
+      ],
+      "correctIndex": 0,
+      "explanation": "Gương cầu lồi có khả năng phản xạ ánh sáng về phía sau, tạo vùng nhìn thấy rộng hơn, cho phép tài xế quan sát khúc cua phía bên kia một cách an toàn.",
+      "tags": ["Vật lý", "Quang học"]
+    },
+    {
+      "id": "q002",
+      "type": "multiple_choice",
+      "category": "Critical Thinking",
+      "difficulty": "Trung bình",
+      "text": "Trong từ trường đều, đại lượng nào dưới đây là đại lượng vecto?",
+      "options": [
+        "Từ thông",
+        "Suất điện động cảm ứng",
+        "Cảm ứng từ",
+        "Điện trở"
+      ],
+      "correctIndex": 2,
+      "explanation": "A. Từ thông: Vô hướng, chỉ có độ lớn (Wb). B. Suất điện động cảm ứng: Vô hướng, chỉ có độ lớn (V). C. Cảm ứng từ: Là vecto, có độ lớn và hướng (T). D. Điện trở: Vô hướng, chỉ có độ lớn (Ω).",
+      "tags": ["Vật lý", "Điện từ học"]
+    },
+    {
+      "id": "q003",
+      "type": "multiple_choice",
+      "category": "Problem Solving",
+      "difficulty": "Trung bình",
+      "text": "Một vật khối lượng m kg trượt từ đỉnh mặt phẳng nghiêng dài 10m với góc nghiêng 30°. Hệ số ma sát giữa vật và mặt phẳng là 0,1. Sau khi rời mặt phẳng nghiêng, vật tiếp tục chuyển động trên mặt phẳng nằm ngang có hệ số ma sát 0,2. Hỏi vật dừng lại cách chân mặt phẳng nghiêng bao xa?",
+      "options": [
+        "12,5 m",
+        "15 m",
+        "17,5 m",
+        "20,4 m"
+      ],
+      "correctIndex": 3,
+      "explanation": "Gia tốc trên mặt phẳng nghiêng: a₁ = g sin 30° - μg cos 30° = 4(m/s²) ⟹ v = √80 (m/s). Trên mặt phẳng ngang: a₂ = -0,2×9,8 = -1,96(m/s²) ⟹ s₂ = 80/(2×1,96) = 20,4(m)",
+      "tags": ["Vật lý", "Cơ học"]
+    },
+    {
+      "id": "q004",
+      "type": "multiple_choice",
+      "category": "Problem Solving",
+      "difficulty": "Trung bình",
+      "text": "Đồ chơi thú nhún là một con lắc lò xo thẳng đứng. Lò xo có độ cứng k = 150 N/m và khối đầu gắn trên lò xo có khối lượng m = 0,15 kg. Khi con lắc đang ở vị trí cân bằng, dùng búa gỗ nhẹ vào khối đầu thú nhún theo phương thẳng đứng. Con lắc dao động với phương trình: x = 1,2 cos(ωt + π/2) (x tính bằng cm, t tính bằng s). Vận tốc của khối đầu thú nhún tại thời điểm t=1,5(s) là bao nhiêu?",
+      "image": "https://pub-dcf75ca5a61b4d1fa3a55cce51b3fd56.r2.dev/he-thong-thi-rsa/4b8cd681-a6cf-4c48-9aab-72a847a6b18b.png",
+      "options": [
+        "-36,1 cm/s",
+        "3,66 cm/s",
+        "36,1 cm/s",
+        "-3,66 cm/s"
+      ],
+      "correctIndex": 2,
+      "explanation": "v = -ωA sin(ωt + φ) = -10√10 × 1,2 × sin(10√10 × 1,5 + π/2) = 36,14 cm/s",
+      "tags": ["Vật lý", "Dao động và sóng"]
+    },
+    {
+      "id": "q005",
+      "type": "multiple_choice",
+      "category": "Critical Thinking",
+      "difficulty": "Trung bình",
+      "text": "Dựa vào thông tin về tia X và hình ảnh chụp phổi bằng tia X, kết luận nào sau đây là sai?",
+      "image": "https://pub-dcf75ca5a61b4d1fa3a55cce51b3fd56.r2.dev/he-thong-thi-rsa/ddf22171-b400-4ba8-8c92-52e5cf48416b.png",
+      "options": [
+        "Xương chứa nhiều canxi hấp thụ nhiều tia X hơn nên xuất hiện vùng trắng trên phim",
+        "Mô mềm hấp thụ tia X nhiều hơn xương nên trên phim xuất hiện màu xám",
+        "Các khoang chứa khí như phổi hấp thụ tia X rất ít nên xuất hiện vùng tối trên phim",
+        "Khi nhìn trên tấm phim chụp X-quang, bác sĩ có chuyên môn sẽ xác định được các bệnh như tràn dịch màng phổi"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mô mềm hấp thụ tia X ít hơn xương nên tạo vùng xám, không phải tạo vùng trắng.",
+      "tags": ["Vật lý", "Tia X"]
+    }
+  ]
+}
