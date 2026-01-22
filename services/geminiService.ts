@@ -4,10 +4,12 @@ import { generateId } from "./dbService";
 
 // Safe API Key Retrieval for Web Deployments
 const getApiKey = (): string | undefined => {
-  // 1. Ưu tiên: Kiểm tra biến môi trường chuẩn Vite/Web (Thường dùng trên Vercel/Netlify)
+  // 1. Ưu tiên: Kiểm tra biến môi trường chuẩn Vite/Web (Thường dùng trên Vercel/Netlify/Firebase)
   try {
     // @ts-ignore
     if (typeof import.meta !== 'undefined' && import.meta.env) {
+      // @ts-ignore
+      if (import.meta.env.VITE_GEMINI_API_KEY) return import.meta.env.VITE_GEMINI_API_KEY;
       // @ts-ignore
       if (import.meta.env.VITE_API_KEY) return import.meta.env.VITE_API_KEY;
       // @ts-ignore
@@ -20,8 +22,10 @@ const getApiKey = (): string | undefined => {
   // 2. Dự phòng: Kiểm tra process.env (Chuẩn Node.js hoặc Webpack cũ)
   try {
     if (typeof process !== 'undefined' && process.env) {
-      if (process.env.API_KEY) return process.env.API_KEY;
+      if (process.env.VITE_GEMINI_API_KEY) return process.env.VITE_GEMINI_API_KEY;
+      if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
       if (process.env.VITE_API_KEY) return process.env.VITE_API_KEY;
+      if (process.env.API_KEY) return process.env.API_KEY;
       if (process.env.REACT_APP_API_KEY) return process.env.REACT_APP_API_KEY;
     }
   } catch (e) {
