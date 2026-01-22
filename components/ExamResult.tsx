@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Exam, ExamAttempt, Question } from '../types';
 import { Button } from './Button';
 import { streamAIExplanation } from '../services/geminiService';
-import { MathText } from './Mathtext';
+import { MathText } from './MathText';
 
 interface ExamResultProps {
   attempt: ExamAttempt;
