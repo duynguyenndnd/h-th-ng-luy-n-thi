@@ -35,6 +35,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [publishingExamId, setPublishingExamId] = useState<string | null>(null);
 
+  // Debug logging
+  React.useEffect(() => {
+    console.log('📊 Dashboard rendered with userRole:', userRole);
+    console.log('👤 User is admin:', userRole === 'admin');
+    console.log('✏️ Can edit:', userRole === 'admin');
+    console.log('📁 onManageUsers available:', !!onManageUsers);
+    console.log('📈 onViewAdminDashboard available:', !!onViewAdminDashboard);
+  }, [userRole, onManageUsers, onViewAdminDashboard]);
+
   const filteredExams = exams.filter(exam => {
     const matchesType = filterType === 'all' || exam.type === filterType;
     const matchesSearch = exam.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -42,7 +51,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
     return matchesType && matchesSearch;
   });
 
-  const canEdit = userRole === 'admin' || userRole === 'teacher';
+  const canEdit = userRole === 'admin';
 
   return (
     <div className="space-y-8">

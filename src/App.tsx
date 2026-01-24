@@ -69,6 +69,7 @@ const App: React.FC = () => {
       setFirebaseUser(user);
       if (user) {
         console.log('✅ Firebase user logged in:', user.email);
+        console.log('🔑 UID:', user.uid);
         
         try {
           const userDocRef = doc(db, 'users', user.uid);
@@ -76,15 +77,23 @@ const App: React.FC = () => {
           
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
+            console.log('📋 Firestore user data:', userData);
+            console.log('🎯 Role from Firestore:', userData?.role);
+            
             if (userData?.role) {
+              console.log('✅ Setting userRole to:', userData.role);
               setUserRole(userData.role as UserRole);
+            } else {
+              console.warn('⚠️  Role field is missing in Firestore user data');
+              setUserRole('user');
             }
           } else {
-            setUserRole('student');
+            console.warn('⚠️  User document does not exist in Firestore');
+            setUserRole('user');
           }
         } catch (error) {
           console.error('❌ Profile fetch failed:', error);
-          setUserRole('student');
+          setUserRole('user');
         }
         
         setIsSyncing(true);
