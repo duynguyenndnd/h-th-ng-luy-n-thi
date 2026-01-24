@@ -456,11 +456,11 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({ exam, mode, onFinish, on
                    <div className="mt-4 pt-4 border-t border-blue-200/50">
                       {activeAIQuestionId !== currentQuestion.id ? (
                         <button onClick={() => handleAIExplain(currentQuestion)} className="text-sm text-purple-600 font-bold flex items-center gap-1 hover:underline">
-                           ✨ Hỏi gia sư AI
+                           📖 Giải thích chi tiết
                         </button>
                       ) : (
                         <div className="bg-white p-4 rounded-lg border border-purple-100 shadow-sm mt-2 text-sm text-slate-700">
-                           {loadingAI ? <span className="animate-pulse text-purple-600">Đang suy nghĩ...</span> : <MathText text={aiExplanation} />}
+                           {loadingAI ? <span className="animate-pulse text-purple-600">Đang tải...</span> : <MathText text={aiExplanation} />}
                         </div>
                       )}
                    </div>
