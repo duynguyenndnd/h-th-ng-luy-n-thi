@@ -8,7 +8,6 @@ export default defineConfig(({ mode }) => {
     // Log environment variables for debugging
     console.log('Vite Build Mode:', mode);
     console.log('VITE_GEMINI_API_KEY available:', !!env.VITE_GEMINI_API_KEY);
-    console.log('VITE_OPENAI_API_KEY available:', !!env.VITE_OPENAI_API_KEY);
     
     return {
       server: {
@@ -19,9 +18,7 @@ export default defineConfig(({ mode }) => {
       plugins: [react()],
       define: {
         'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY || ''),
-        'import.meta.env.VITE_OPENAI_API_KEY': JSON.stringify(env.VITE_OPENAI_API_KEY || ''),
         'process.env.VITE_GEMINI_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY || ''),
-        'process.env.VITE_OPENAI_API_KEY': JSON.stringify(env.VITE_OPENAI_API_KEY || ''),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY || '')
       },
       resolve: {
