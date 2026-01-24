@@ -2,7 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Exam, Question, QuestionCategory, ExamType } from "../types";
 import { generateId } from "./dbService";
 import { getCachedExplanation, cacheExplanation } from "./aiCacheService";
-import { getCachedExplanation, cacheExplanation } from "./aiCacheService";
+import { streamDeepseekExplanation, scoreEssayWithDeepseek } from "./deepseekService";
 
 // Safe API Key Retrieval for Web Deployments
 export const getApiKey = (): string | undefined => {
@@ -76,55 +76,50 @@ export const streamAIExplanation = async (question: Question, onUpdate: (text: s
       return;
     }
 
-    const apiKey = getApiKey();
-    if (!apiKey) {
-      // 🔄 Fallback: Dùng explanation từ file nếu có
-      if (question.explanation) {
-        const fallbackMsg = `📖 (Từ tài liệu gốc)\n\n${question.explanation}`;
-        onUpdate(fallbackMsg);
-        cacheExplanation(question.id, fallbackMsg);
-        return;
-      }
-
-      const errorMsg = "⚠️ Không thể kết nối AI. Vui lòng kiểm tra API Key hoặc thử lại sau.";
-      onUpdate(errorMsg);
-      console.error("API Key missing");
-      return;
-    }
-
-    // 2️⃣ Retry logic với exponential backoff
-    let lastError: any;
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        await generateAIExplanation(question, onUpdate);
-        return;
-      } catch (error: any) {
-        lastError = error;
-        
-        // Nếu là lỗi rate limit hoặc timeout, retry
-        if ((error.message?.includes("429") || error.message?.includes("timeout")) && attempt < maxRetries) {
-          const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s...
-          console.warn(`⏳ Retry attempt ${attempt}/${maxRetries} after ${delay}ms`);
-          await new Promise(resolve => setTimeout(resolve, delay));
-          continue;
+    const geminiKey = getApiKey();
+    
+    // 2️⃣ Try Gemini first
+    if (geminiKey) {
+      let lastError: any;
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          console.log(`🤖 Attempting Gemini (${attempt}/${maxRetries})...`);
+          await generateAIExplanation(question, onUpdate);
+          return;
+        } catch (error: any) {
+          lastError = error;
+          console.warn(`⚠️ Gemini attempt ${attempt} failed:`, error.message);
+          
+          // Retry với backoff
+          if (attempt < maxRetries) {
+            const delay = Math.pow(2, attempt) * 1000;
+            console.log(`⏳ Retrying after ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            continue;
+          }
         }
-        
-        // Lỗi khác, sử dụng fallback
-        break;
       }
+      console.log("❌ Gemini failed all attempts, trying Deepseek...");
     }
 
-    // 3️⃣ Fallback: Dùng explanation từ file
+    // 3️⃣ Fallback to Deepseek
+    try {
+      console.log("🔄 Falling back to Deepseek...");
+      await streamDeepseekExplanation(question, onUpdate);
+      return;
+    } catch (deepseekError) {
+      console.error("❌ Deepseek also failed:", deepseekError);
+    }
+
+    // 4️⃣ Final fallback: Dùng explanation từ file
     if (question.explanation) {
-      const fallbackMsg = `📖 (Không thể kết nối AI)\n\n${question.explanation}`;
+      const fallbackMsg = `📖 (AI không khả dụng)\n\n${question.explanation}`;
       onUpdate(fallbackMsg);
-      cacheExplanation(question.id, fallbackMsg);
+      cacheExplanation(question.id, question.text, fallbackMsg);
     } else {
       const errorMsg = "❌ Lỗi: Không thể lấy giải thích. Vui lòng thử lại sau.";
       onUpdate(errorMsg);
     }
-
-    console.error("All retry attempts failed:", lastError);
   } catch (error) {
     console.error("Unexpected error in streamAIExplanation:", error);
     onUpdate("❌ Có lỗi xảy ra. Vui lòng thử lại.");
