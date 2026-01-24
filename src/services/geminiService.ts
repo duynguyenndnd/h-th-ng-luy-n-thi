@@ -2,6 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Exam, Question, QuestionCategory, ExamType } from "../types";
 import { generateId } from "./dbService";
 import { getCachedExplanation, cacheExplanation } from "./aiCacheService";
+import { streamOpenAIExplanation, scoreEssayWithOpenAI } from "./openaiService";
 
 // Safe API Key Retrieval for Web Deployments
 export const getApiKey = (): string | undefined => {
@@ -98,10 +99,19 @@ export const streamAIExplanation = async (question: Question, onUpdate: (text: s
           }
         }
       }
-      console.log("❌ Gemini failed all attempts");
+      console.log("❌ Gemini failed all attempts, trying OpenAI...");
     }
 
-    // 3️⃣ Final fallback: Dùng explanation từ file
+    // 3️⃣ Fallback to OpenAI
+    try {
+      console.log("🔄 Falling back to OpenAI...");
+      await streamOpenAIExplanation(question, onUpdate);
+      return;
+    } catch (openaiError) {
+      console.error("❌ OpenAI also failed:", openaiError);
+    }
+
+    // 4️⃣ Final fallback: Dùng explanation từ file
     if (question.explanation) {
       const fallbackMsg = `📖 (AI không khả dụng)\n\n${question.explanation}`;
       onUpdate(fallbackMsg);
