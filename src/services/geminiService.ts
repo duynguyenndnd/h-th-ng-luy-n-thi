@@ -75,39 +75,13 @@ export const streamAIExplanation = async (question: Question, onUpdate: (text: s
       return;
     }
 
-    const geminiKey = getApiKey();
-    
-    // 2️⃣ Try Gemini first
-    if (geminiKey) {
-      let lastError: any;
-      for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        try {
-          console.log(`🤖 Attempting Gemini (${attempt}/${maxRetries})...`);
-          await generateAIExplanation(question, onUpdate);
-          return;
-        } catch (error: any) {
-          lastError = error;
-          console.warn(`⚠️ Gemini attempt ${attempt} failed:`, error.message);
-          
-          // Retry với backoff
-          if (attempt < maxRetries) {
-            const delay = Math.pow(2, attempt) * 1000;
-            console.log(`⏳ Retrying after ${delay}ms...`);
-            await new Promise(resolve => setTimeout(resolve, delay));
-            continue;
-          }
-        }
-      }
-      console.log("❌ Gemini failed all attempts");
-    }
-
-    // 3️⃣ Final fallback: Dùng explanation từ file
+    // 2️⃣ Direct fallback: Dùng explanation từ file (không cần AI)
     if (question.explanation) {
-      const fallbackMsg = `📖 (AI không khả dụng)\n\n${question.explanation}`;
-      onUpdate(fallbackMsg);
-      cacheExplanation(question.id, question.text, fallbackMsg);
+      const msg = `📖 Giải thích:\n\n${question.explanation}`;
+      onUpdate(msg);
+      cacheExplanation(question.id, question.text, msg);
     } else {
-      const errorMsg = "❌ Lỗi: Không thể lấy giải thích. Vui lòng thử lại sau.";
+      const errorMsg = "❌ Lỗi: Không có giải thích cho câu hỏi này.";
       onUpdate(errorMsg);
     }
   } catch (error) {
