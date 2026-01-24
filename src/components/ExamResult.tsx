@@ -4,6 +4,7 @@ import { Button } from './Button';
 import { streamAIExplanation } from '../services/geminiService';
 import { scoreEssay, scoreShortAnswer, EssayScoreResult } from '../services/essayScoringService';
 import { MathText } from './MathText';
+import { EvaluationCard } from './EvaluationCard';
 
 interface ExamResultProps {
   attempt: ExamAttempt;
@@ -137,6 +138,9 @@ export const ExamResult: React.FC<ExamResultProps> = ({ attempt, exam, onHome })
            <Button onClick={() => window.print()} variant="secondary" className="bg-white">In kết quả</Button>
         </div>
       </div>
+
+      {/* Evaluation Card with Character */}
+      <EvaluationCard score={correctCount} totalScore={total} percentage={percentage} />
 
       {/* Detailed Review List */}
       <div>
