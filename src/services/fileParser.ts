@@ -1,6 +1,7 @@
 
 import { Exam, Question, QuestionCategory, QuestionDifficulty, QuestionType, ExamType } from '../types';
 import { generateId } from './dbService';
+import { getDefaultDuration } from '../constants/examConfig';
 
 // --- Interfaces ---
 // (Giữ nguyên interfaces cũ, chỉ cập nhật logic hàm map)
@@ -72,25 +73,170 @@ const mapDifficulty = (diffString: string): QuestionDifficulty => {
   return QuestionDifficulty.MEDIUM;
 };
 
+// Helper: Convert LaTeX-like math symbols to KaTeX format
+const fixMathSymbols = (text: string): string => {
+  if (!text) return text;
+  
+  // Fix ${...}$ format (replace with ${...}$)
+  text = text.replace(/\$\{([^}]+)\}\$/g, '$$${ $1 }$$');
+  
+  // Common math symbol replacements
+  const replacements: Record<string, string> = {
+    '\\\\circ': '^\\circ',           // ° symbol
+    '\\\\sqrt': '\\sqrt',              // Square root
+    '\\\\mathbb': '\\mathbb',          // Blackboard bold
+    '\\\\Rightarrow': '\\Rightarrow',  // Right arrow
+    '\\\\Leftrightarrow': '\\Leftrightarrow',
+    '\\\\frac': '\\frac',              // Fraction
+    '\\\\Delta': '\\Delta',            // Greek Delta
+    '\\\\triangle': '\\triangle',      // Triangle symbol
+    '\\\\angle': '\\angle',            // Angle symbol
+    '\\\\approx': '\\approx',          // Approximately equal
+    '\\\\leq': '\\leq',                // Less than or equal
+    '\\\\geq': '\\geq',                // Greater than or equal
+    '\\\\neq': '\\neq',                // Not equal
+    '\\\\times': '\\times',            // Multiply
+    '\\\\div': '\\div',                // Division
+    '\\\\pm': '\\pm',                  // Plus minus
+    '\\\\infty': '\\infty',            // Infinity
+    '\\\\alpha': '\\alpha',            // Alpha
+    '\\\\beta': '\\beta',              // Beta
+    '\\\\gamma': '\\gamma',            // Gamma
+    '\\\\pi': '\\pi',                  // Pi
+    '\\\\sin': '\\sin',                // Sin
+    '\\\\cos': '\\cos',                // Cos
+    '\\\\tan': '\\tan',                // Tan
+    '\\\\log': '\\log',                // Log
+    '\\\\ln': '\\ln',                  // Natural log
+    '\\\\sum': '\\sum',                // Sum
+    '\\\\prod': '\\prod',              // Product
+    '\\\\int': '\\int',                // Integral
+    '\\\\in': '\\in',                  // In (set membership)
+    '\\\\notin': '\\notin',            // Not in
+    '\\\\cup': '\\cup',                // Union
+    '\\\\cap': '\\cap',                // Intersection
+    '\\\\subset': '\\subset',          // Subset
+    '\\\\forall': '\\forall',          // For all
+    '\\\\exists': '\\exists',          // Exists
+  };
+  
+  // Apply replacements
+  Object.entries(replacements).forEach(([from, to]) => {
+    text = text.replace(new RegExp(from, 'g'), to);
+  });
+  
+  return text;
+};
+
 export const parseJSONExam = (content: string): Exam | null => {
   try {
     const rawData = JSON.parse(content);
     let questions: Question[] = [];
     let title = "Đề thi được import";
     let description = "Đề thi từ file JSON";
-    let duration = 90;
-    let examType = ExamType.TSA; // Default
+    let examType = ExamType.TSA;
+    let duration = getDefaultDuration(ExamType.TSA);
     let imageBank: Record<string, string> | undefined = undefined;
 
     if (rawData.imageBank) {
       imageBank = rawData.imageBank;
     }
 
-    if (rawData.exam && Array.isArray(rawData.questions)) {
+    // Handle new format (with title, description, questions array directly)
+    if (rawData.title && Array.isArray(rawData.questions)) {
+      title = rawData.title || title;
+      description = rawData.description || description;
+      duration = rawData.durationMinutes || getDefaultDuration(ExamType.TSA);
+      
+      // Detect exam type from category
+      const firstCategory = rawData.questions[0]?.category || '';
+      if (firstCategory.includes('Toán') || firstCategory.includes('Math')) {
+        examType = ExamType.HSA;
+      }
+
+      const convertNewFormatQuestion = (q: any): Question => {
+        const questionType = q.type || 'multiple_choice';
+        const category = mapCategory(q.category || 'Unknown');
+        const difficulty = mapDifficulty(q.difficulty || 'Trung bình');
+        const tags = Array.isArray(q.tags) ? q.tags : [];
+
+        // Fix math symbols in text and explanation
+        const text = fixMathSymbols(q.text || '');
+        const explanation = fixMathSymbols(q.explanation || '');
+        const explanationImage = q.explanationImage || undefined;
+
+        const baseQuestion: Question = {
+          id: q.id || generateId(),
+          type: questionType as QuestionType,
+          text,
+          image: q.image || undefined,
+          explanation,
+          explanationImage,
+          category,
+          difficulty,
+          tags,
+          requiresImage: q.requiresImage || false
+        };
+
+        // Handle different question types
+        if (questionType === 'multiple_choice') {
+          return {
+            ...baseQuestion,
+            options: q.options || [],
+            correctIndex: q.correctIndex || 0
+          };
+        } else if (questionType === 'true_false') {
+          return {
+            ...baseQuestion,
+            rows: q.rows || []
+          };
+        } else if (questionType === 'short_answer' || questionType === 'fill_in_blank') {
+          return {
+            ...baseQuestion,
+            correctAnswerText: q.correctAnswerText || ''
+          };
+        } else if (questionType === 'essay') {
+          return baseQuestion;
+        } else if (questionType === 'matching') {
+          return {
+            ...baseQuestion,
+            matchPairs: q.matchPairs || []
+          };
+        } else if (questionType === 'ordering') {
+          return {
+            ...baseQuestion,
+            items: q.items || []
+          };
+        } else if (questionType === 'reading') {
+          return {
+            ...baseQuestion,
+            subQuestions: (q.subQuestions || []).map(convertNewFormatQuestion)
+          };
+        } else if (questionType === 'multiple_select') {
+          return {
+            ...baseQuestion,
+            options: q.options || [],
+            correctIndices: q.correctIndices || []
+          };
+        } else if (questionType === 'true_false_explain') {
+          return {
+            ...baseQuestion,
+            correctAnswer: q.correctAnswer,
+            explanation
+          };
+        }
+
+        return baseQuestion;
+      };
+
+      questions = (rawData.questions as any[]).map(convertNewFormatQuestion);
+    } 
+    else if (rawData.exam && Array.isArray(rawData.questions)) {
+      // Handle old format (TSA specific)
       const examData = rawData.exam as TSAJsonExamMetadata;
       title = examData.title || title;
       description = examData.description || `Đề thi môn: ${examData.subject_area || 'Tổng hợp'}`;
-      duration = examData.duration_minutes || 90;
+      duration = examData.duration_minutes || getDefaultDuration(examData.type || ExamType.TSA);
       if (examData.type) examType = examData.type;
 
       const convertQuestion = (q: TSAJsonQuestion): Question => {
@@ -131,15 +277,15 @@ export const parseJSONExam = (content: string): Exam | null => {
         }
 
         return {
-           id: generateId(),
+           id: q.id ? String(q.id) : generateId(),
            type,
-           text: q.question_text,
+           text: fixMathSymbols(q.question_text),
            image: q.question_image,
-           explanation: q.explanation || "",
+           explanation: fixMathSymbols(q.explanation || ""),
            category: baseCategory,
            difficulty: baseDifficulty,
            tags,
-           options,
+           options: options.map(fixMathSymbols),
            correctIndex,
            rows,
            correctAnswerText,
@@ -149,21 +295,31 @@ export const parseJSONExam = (content: string): Exam | null => {
 
       questions = (rawData.questions as TSAJsonQuestion[]).map(convertQuestion);
     } 
-    else if (rawData.questions && Array.isArray(rawData.questions) && rawData.questions[0].options) {
-        // Legacy internal format logic
+    else if (rawData.questions && Array.isArray(rawData.questions) && rawData.questions[0]?.options) {
+        // Legacy internal format
         title = rawData.title || title;
         description = rawData.description || description;
-        questions = rawData.questions;
+        questions = rawData.questions.map((q: any) => ({
+          ...q,
+          text: fixMathSymbols(q.text),
+          explanation: fixMathSymbols(q.explanation),
+          options: q.options?.map(fixMathSymbols)
+        }));
     }
 
     if (questions.length === 0) return null;
 
     // Detect Type heuristic if not set
-    if (!rawData.exam?.type) {
+    if (!examType || examType === ExamType.TSA) {
         const isHSA = questions.some(q => 
             q.category === QuestionCategory.HISTORY || 
             q.category === QuestionCategory.PHYSICS || 
-            q.category === QuestionCategory.LITERATURE
+            q.category === QuestionCategory.LITERATURE ||
+            q.category === QuestionCategory.MATH ||
+            q.category === QuestionCategory.CHEMISTRY ||
+            q.category === QuestionCategory.BIOLOGY ||
+            q.category === QuestionCategory.GEOGRAPHY ||
+            q.category === QuestionCategory.ENGLISH
         );
         examType = isHSA ? ExamType.HSA : ExamType.TSA;
     }
@@ -227,14 +383,16 @@ export const parseCSVExam = (content: string, filename: string): Exam | null => 
 
       if (cleanParts.length < 5) continue; 
 
-      const qText = cleanParts[0];
+      const qText = fixMathSymbols(cleanParts[0]);
       const qImage = cleanParts[1];
-      const options = [cleanParts[2], cleanParts[4], cleanParts[6], cleanParts[8]].filter(o => o !== undefined); 
+      const options = [cleanParts[2], cleanParts[4], cleanParts[6], cleanParts[8]]
+        .filter(o => o !== undefined)
+        .map(fixMathSymbols); 
       
       const correctVal = parseInt(cleanParts[10]);
       const correctIndex = !isNaN(correctVal) && correctVal >= 1 && correctVal <= 4 ? correctVal - 1 : 0;
       
-      let explanation = cleanParts[11] || "";
+      let explanation = fixMathSymbols(cleanParts[11] || "");
       const explanationImage = cleanParts[12];
       if (explanationImage) {
          explanation += `\n\n![Hình minh họa](${explanationImage})`;

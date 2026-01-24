@@ -134,10 +134,6 @@ const App: React.FC = () => {
   };
 
   const handleDeleteUser = async (username: string) => {
-    if (username === 'admin') {
-      alert("Không thể xóa tài khoản Admin mặc định");
-      return;
-    }
     if (confirm(`Xóa tài khoản ${username}?`)) {
       await deleteUser(username);
       loadUsers();

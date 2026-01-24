@@ -4,6 +4,7 @@ import { Button } from './Button';
 import { generateId } from '../services/dbService';
 import { ImageUploader } from './ImageUploader';
 import { MathText } from './MathText';
+import { getDefaultDuration } from '../constants/examConfig';
 
 interface ExamEditorProps {
   initialExam?: Exam | null;
@@ -18,6 +19,7 @@ const EmptyQuestion: Question = {
   options: ['', '', '', '', ''],
   correctIndex: 0,
   explanation: '',
+  explanationImage: '',
   category: QuestionCategory.PROBLEM_SOLVING,
   difficulty: QuestionDifficulty.MEDIUM,
   tags: [],
@@ -28,8 +30,8 @@ export const ExamEditor: React.FC<ExamEditorProps> = ({ initialExam, onSave, onC
   const [activeTab, setActiveTab] = useState<'details' | 'images'>('details');
   const [title, setTitle] = useState(initialExam?.title || '');
   const [description, setDescription] = useState(initialExam?.description || '');
-  const [duration, setDuration] = useState(initialExam?.durationMinutes || 90);
   const [examType, setExamType] = useState<ExamType>(initialExam?.type || ExamType.TSA);
+  const [duration, setDuration] = useState(initialExam?.durationMinutes || getDefaultDuration(initialExam?.type || ExamType.TSA));
   const [questions, setQuestions] = useState<Question[]>(initialExam?.questions || []);
   const [imageBank, setImageBank] = useState<Record<string, string>>(initialExam?.imageBank || {});
   
@@ -40,6 +42,15 @@ export const ExamEditor: React.FC<ExamEditorProps> = ({ initialExam, onSave, onC
       addQuestion();
     }
   }, []);
+
+  // Auto-adjust duration when exam type changes (if editing, keep existing)
+  const handleExamTypeChange = (newType: ExamType) => {
+    setExamType(newType);
+    // Only set default duration if creating new exam, not if editing
+    if (!initialExam) {
+      setDuration(getDefaultDuration(newType));
+    }
+  };
 
   const addQuestion = () => {
     const newQ = { ...EmptyQuestion, id: generateId() };
@@ -180,7 +191,7 @@ export const ExamEditor: React.FC<ExamEditorProps> = ({ initialExam, onSave, onC
             <select 
                className="bg-slate-100 border border-slate-300 text-slate-700 font-bold py-1 px-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
                value={examType}
-               onChange={(e) => setExamType(e.target.value as ExamType)}
+               onChange={(e) => handleExamTypeChange(e.target.value as ExamType)}
             >
                <option value={ExamType.TSA}>Hệ TSA (Tư duy)</option>
                <option value={ExamType.HSA}>Hệ HSA (Đánh giá năng lực)</option>
@@ -280,8 +291,46 @@ export const ExamEditor: React.FC<ExamEditorProps> = ({ initialExam, onSave, onC
                         )}
 
                         <div>
+                           <p className="text-sm font-bold mb-1">Ảnh câu hỏi (URL hoặc Base64):</p>
+                           <input 
+                              className="border p-2 rounded w-full text-xs" 
+                              placeholder="https://... hoặc data:image/..."
+                              value={q.image || ''} 
+                              onChange={e => updateQuestion(q.id, { image: e.target.value })} 
+                           />
+                           {q.image && (
+                              <div className="mt-2 p-2 bg-slate-100 rounded">
+                                 {q.image.startsWith('data:') || q.image.startsWith('http') ? (
+                                    <img src={q.image} alt="Question" className="max-w-xs h-auto rounded" />
+                                 ) : (
+                                    <p className="text-xs text-slate-600">🖼️ Ảnh sẽ được hiển thị khi xem bài</p>
+                                 )}
+                              </div>
+                           )}
+                        </div>
+
+                        <div>
                            <p className="text-sm font-bold mb-1">Giải thích:</p>
                            <textarea className="w-full border p-2 rounded" value={q.explanation} onChange={e => updateQuestion(q.id, { explanation: e.target.value })} />
+                        </div>
+
+                        <div>
+                           <p className="text-sm font-bold mb-1">Ảnh giải thích (URL hoặc Base64):</p>
+                           <input 
+                              className="border p-2 rounded w-full text-xs" 
+                              placeholder="https://... hoặc data:image/..."
+                              value={q.explanationImage || ''} 
+                              onChange={e => updateQuestion(q.id, { explanationImage: e.target.value })} 
+                           />
+                           {q.explanationImage && (
+                              <div className="mt-2 p-2 bg-slate-100 rounded">
+                                 {q.explanationImage.startsWith('data:') || q.explanationImage.startsWith('http') ? (
+                                    <img src={q.explanationImage} alt="Explanation" className="max-w-xs h-auto rounded" />
+                                 ) : (
+                                    <p className="text-xs text-slate-600">🖼️ Ảnh sẽ được hiển thị khi xem đáp án</p>
+                                 )}
+                              </div>
+                           )}
                         </div>
                         
                         <div className="pt-2 border-t flex justify-end">

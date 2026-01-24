@@ -1,9 +1,8 @@
 
-import { Exam, QuestionCategory, QuestionDifficulty, ExamType } from '../types';
+import { Exam, QuestionCategory, QuestionDifficulty } from '../types';
 
 export const INITIAL_EXAM: Exam = {
   id: 'tsa-demo-01',
-  type: ExamType.TSA,
   title: 'TSA Demo: Tư duy Phản biện & Giải quyết Vấn đề',
   description: 'Đề thi mẫu giúp bạn làm quen với cấu trúc bài thi TSA. Bao gồm các câu hỏi về logic, toán học và tư duy không gian.',
   questionCount: 5,

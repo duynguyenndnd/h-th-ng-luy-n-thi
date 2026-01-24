@@ -1,0 +1,222 @@
+{
+  "title": "Đề thi mẫu đầy đủ - Tất cả loại câu hỏi",
+  "description": "Đề thi chứa tất cả 10 loại câu hỏi được hỗ trợ để demo các định dạng khác nhau",
+  "type": "TSA",
+  "durationMinutes": 150,
+  "questions": [
+    {
+      "type": "multiple_choice",
+      "text": "Câu hỏi 1: Tổng của 15 + 25 bằng bao nhiêu?",
+      "explanation": "15 + 25 = 40. Đây là phép cộng đơn giản.",
+      "category": "Toán học (Định lượng)",
+      "difficulty": "Dễ",
+      "options": [
+        "30",
+        "35",
+        "40",
+        "45"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "type": "true_false",
+      "text": "Câu hỏi 2: Trái Đất là hành tinh duy nhất có sự sống trong hệ mặt trời?",
+      "explanation": "Theo kiến thức hiện tại, Trái Đất là hành tinh duy nhất được biết là có sự sống phức tạp.",
+      "category": "Địa lý",
+      "difficulty": "Trung bình",
+      "options": [
+        "Đúng",
+        "Sai"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "type": "multiple_select",
+      "text": "Câu hỏi 3: Những nước nào dưới đây nằm ở Đông Nam Á? (Chọn 2 hoặc hơn)",
+      "explanation": "Cả ba nước Việt Nam, Thái Lan, và Indonesia đều nằm ở khu vực Đông Nam Á.",
+      "category": "Địa lý",
+      "difficulty": "Trung bình",
+      "options": [
+        "Việt Nam",
+        "Thái Lan",
+        "Indonesia",
+        "Hàn Quốc"
+      ],
+      "correctIndices": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "type": "fill_in_blank",
+      "text": "Câu hỏi 4: Thủ đô của Pháp là ___________",
+      "explanation": "Paris là thủ đô và thành phố lớn nhất của Pháp, được biết đến như 'Thành phố của tình yêu'.",
+      "category": "Địa lý",
+      "difficulty": "Dễ",
+      "correctAnswerText": "Paris",
+      "acceptVariations": [
+        "paris",
+        "PARIS",
+        "Pa ris"
+      ]
+    },
+    {
+      "type": "short_answer",
+      "text": "Câu hỏi 5: Nêu 3 lợi ích chính của việc học tiếng Anh",
+      "explanation": "Tiếng Anh mở ra nhiều cơ hội trong học tập, công việc, và giao tiếp quốc tế. Ba lợi ích chính là: (1) cơ hội học tập toàn cầu, (2) cơ hội việc làm tốt hơn, (3) khả năng giao tiếp quốc tế.",
+      "category": "Tiếng Anh",
+      "difficulty": "Trung bình",
+      "correctAnswerText": "Mở rộng cơ hội học tập, tìm kiếm công việc tốt, và giao tiếp quốc tế"
+    },
+    {
+      "type": "ordering",
+      "text": "Câu hỏi 6: Sắp xếp các bước để nấu mỳ ý trong đúng thứ tự",
+      "explanation": "Quy trình nấu mỳ ý đúng là: (1) đun sôi nước, (2) thêm mỳ vào nước sôi, (3) nấu 8-10 phút, (4) xả nước và thêm sốt",
+      "category": "Chung",
+      "difficulty": "Dễ",
+      "options": [
+        "Thêm sốt và trộn đều",
+        "Đun sôi nước",
+        "Nấu mỳ 8-10 phút",
+        "Thêm mỳ vào nước sôi"
+      ],
+      "correctOrder": [
+        1,
+        3,
+        2,
+        0
+      ]
+    },
+    {
+      "type": "matching",
+      "text": "Câu hỏi 7: Ghép thủ đô với nước tương ứng",
+      "explanation": "Mỗi nước có thủ đô riêng. Hà Nội là thủ đô của Việt Nam, Bangkok là thủ đô của Thái Lan, Tokyo là thủ đô của Nhật Bản.",
+      "category": "Địa lý",
+      "difficulty": "Dễ",
+      "leftItems": [
+        {
+          "id": "a",
+          "text": "Việt Nam"
+        },
+        {
+          "id": "b",
+          "text": "Thái Lan"
+        },
+        {
+          "id": "c",
+          "text": "Nhật Bản"
+        }
+      ],
+      "rightItems": [
+        {
+          "id": "1",
+          "text": "Bangkok"
+        },
+        {
+          "id": "2",
+          "text": "Hà Nội"
+        },
+        {
+          "id": "3",
+          "text": "Tokyo"
+        }
+      ],
+      "correctPairs": [
+        {
+          "left": "a",
+          "right": "2"
+        },
+        {
+          "left": "b",
+          "right": "1"
+        },
+        {
+          "left": "c",
+          "right": "3"
+        }
+      ]
+    },
+    {
+      "type": "true_false_explain",
+      "text": "Câu hỏi 8: AI sẽ hoàn toàn thay thế con người trong tất cả các lĩnh vực công việc (Trả lời Đúng hoặc Sai và giải thích)",
+      "explanation": "Câu trả lời Sai. AI sẽ hỗ trợ và tự động hóa nhiều công việc, nhưng không thể thay thế hoàn toàn con người, đặc biệt là các công việc yêu cầu sáng tạo, cảm xúc, và đạo đức.",
+      "category": "Tư duy Phản biện & Logic",
+      "difficulty": "Khó",
+      "options": [
+        "Đúng",
+        "Sai"
+      ],
+      "correctIndex": 1,
+      "correctAnswerText": "Sai. AI sẽ hỗ trợ nhiều công việc nhưng không thay thế hoàn toàn con người"
+    },
+    {
+      "type": "essay",
+      "text": "Câu hỏi 9: Viết một bài luận về 'Vai trò của công nghệ trong giáo dục hiện đại' (500-800 từ). Bài luận cần phải bao gồm: (1) mở bài rõ ràng, (2) ít nhất 3 ý chính, (3) ví dụ cụ thể, (4) kết luận hợp lý.",
+      "explanation": "Bài luận tốt sẽ thể hiện sự hiểu biết sâu sắc về vai trò tích cực của công nghệ trong giáo dục như: truy cập giáo dục từ xa, học tập cá nhân hóa, tương tác tại lớp, v.v. Phải có ví dụ cụ thể và luận điểm rõ ràng.",
+      "category": "Ngữ văn (Định tính)",
+      "difficulty": "Khó",
+      "correctAnswerText": "Bài luận cần phản ánh sự hiểu biết về vai trò tích cực và thách thức của công nghệ trong giáo dục",
+      "rubric": "Nội dung: 40%, Cấu trúc: 30%, Ngôn ngữ và trình bày: 30%"
+    },
+    {
+      "type": "reading",
+      "text": "ĐỌC HIỂU VĂN BẢN:\n\nViệt Nam là một đất nước xinh đẹp nằm ở Đông Nam Á, bờ biển Thái Bình Dương. Dân số khoảng 100 triệu người, làm cho Việt Nam trở thành một trong những nước đông dân nhất thế giới. Thủ đô Hà Nội có lịch sử hơn 1000 năm với những di tích lịch sử quý giá. Thành phố Hồ Chí Minh (cũ gọi là Sài Gòn) là thành phố lớn nhất và trung tâm kinh tế của đất nước. Việt Nam có nền văn hóa phong phú, nổi tiếng với ẩm thực độc đáo, các lễ hội truyền thống, và tình thân thiết của người dân.\n\nQuan sát du lịch đã trở thành một ngành công nghiệp quan trọng của Việt Nam. Những điểm du lịch nổi tiếng như Hạ Long, Hội An, Sapa, và Phú Quốc hàng năm đón triệu lượt khách quốc tế. Du lịch không chỉ mang lại doanh thu lớn mà còn giúp quảng bá văn hóa và con người Việt Nam ra thế giới.\n\nHiện nay, Việt Nam đang phát triển mạnh mẽ với công nghiệp công nghệ cao, sản xuất điện tử, và hợp tác quốc tế. Giáo dục cũng được chú trọng, với nhiều trường đại học danh tiếng và chương trình học tập quốc tế.",
+      "explanation": "Bài đọc cung cấp thông tin tổng quát về Việt Nam, bao gồm địa lý, dân số, lịch sử, du lịch, và phát triển hiện đại.",
+      "category": "Ngữ văn (Định tính)",
+      "difficulty": "Trung bình",
+      "subQuestions": [
+        {
+          "text": "Dân số Việt Nam khoảng bao nhiêu người?",
+          "options": [
+            "50 triệu",
+            "75 triệu",
+            "100 triệu",
+            "150 triệu"
+          ],
+          "correctIndex": 2
+        },
+        {
+          "text": "Thủ đô Hà Nội có lịch sử bao lâu?",
+          "options": [
+            "500 năm",
+            "800 năm",
+            "1000 năm",
+            "1500 năm"
+          ],
+          "correctIndex": 2
+        },
+        {
+          "text": "Thành phố lớn nhất Việt Nam là thành phố nào?",
+          "options": [
+            "Hà Nội",
+            "Hải Phòng",
+            "Hồ Chí Minh",
+            "Đà Nẵng"
+          ],
+          "correctIndex": 2
+        },
+        {
+          "text": "Điểm du lịch nào được đề cập trong bài đọc?",
+          "options": [
+            "Chỉ Hạ Long",
+            "Hạ Long, Hội An, Sapa, Phú Quốc",
+            "Chỉ Hội An",
+            "Không có điểm du lịch được đề cập"
+          ],
+          "correctIndex": 1
+        },
+        {
+          "text": "Du lịch góp phần như thế nào cho Việt Nam?",
+          "options": [
+            "Chỉ mang lại doanh thu",
+            "Chỉ giúp quảng bá văn hóa",
+            "Mang lại doanh thu và quảng bá văn hóa",
+            "Không có tác dụng gì"
+          ],
+          "correctIndex": 2
+        }
+      ]
+    }
+  ]
+}

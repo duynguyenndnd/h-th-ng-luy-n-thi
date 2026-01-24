@@ -41,22 +41,7 @@ export const initDB = async (): Promise<void> => {
 
   const db = await dbPromise;
 
-  // 1. Initial Admin Seeding (Nếu chưa có user nào)
-  const count = await db.count('users');
-  if (count === 0) {
-    console.log("Seeding default admin...");
-    const defaultAdmin: User = {
-      username: 'admin',
-      password: '123', // Mật khẩu mặc định
-      fullName: 'Quản trị viên Hệ thống',
-      role: 'admin',
-      allowedExamTypes: [ExamType.TSA, ExamType.HSA], // Admin có quyền truy cập tất cả
-      registeredAt: Date.now()
-    };
-    await db.put('users', defaultAdmin);
-  }
-
-  // 2. Seed Initial Exam if empty
+  // Seed Initial Exam if empty (admin account is now managed via Firebase)
   const examCount = await db.count('exams');
   if (examCount === 0) {
     await saveExam(INITIAL_EXAM);
@@ -110,8 +95,19 @@ export const deleteUser = async (username: string): Promise<void> => {
 // --- Exam Management ---
 
 export const saveExam = async (exam: Exam): Promise<void> => {
-  const db = await getDB();
-  await db.put('exams', exam);
+  if (!exam || !exam.id) {
+    throw new Error('Exam must have an id field');
+  }
+  
+  try {
+    const db = await getDB();
+    await db.put('exams', exam);
+    console.log('✅ Exam saved to IndexedDB:', exam.id);
+  } catch (error: any) {
+    console.error('❌ Error saving exam to IndexedDB:', error);
+    console.error('Exam object:', exam);
+    throw new Error(`Failed to save exam: ${error?.message || String(error)}`);
+  }
 };
 
 export const getExams = async (): Promise<Exam[]> => {

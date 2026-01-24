@@ -11,6 +11,7 @@
   "dependencies": {
     "@google/genai": "^1.38.0",
     "firebase": "^12.8.0",
+    "firebase-admin": "^13.6.0",
     "idb": "8.0.0",
     "katex": "^0.16.27",
     "react": "^19.2.3",
@@ -18,11 +19,15 @@
     "react-image-crop": "10.1.8"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/katex": "^0.16.8",
     "@types/node": "^22.19.7",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

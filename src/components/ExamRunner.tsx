@@ -3,6 +3,14 @@ import { Exam, Question, QuestionType } from '../types';
 import { Button } from './Button';
 import { streamAIExplanation } from '../services/geminiService';
 import { MathText } from './MathText';
+import { 
+  EssayQuestion, 
+  FillInBlankQuestion, 
+  TrueFalseExplainQuestion, 
+  MatchingQuestion, 
+  MultipleSelectQuestion, 
+  OrderingQuestion 
+} from './questions';
 
 interface ExamRunnerProps {
   exam: Exam;
@@ -303,11 +311,28 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({ exam, mode, onFinish, on
 
   // Main Render Logic Switcher
   const renderQuestionBody = (q: Question) => {
+    const isChecked = checkedQuestions[q.id];
+    
     switch (q.type) {
-      case 'true_false': return renderTrueFalse(q);
-      case 'short_answer': return renderShortAnswer(q);
+      case 'essay': 
+        return <EssayQuestion question={q} value={answers[q.id] || ''} onChange={(v) => handleAnswerChange(q.id, v)} disabled={isChecked} />;
+      case 'fill_in_blank': 
+        return <FillInBlankQuestion question={q} value={answers[q.id] || []} onChange={(v) => handleAnswerChange(q.id, v)} disabled={isChecked} />;
+      case 'true_false_explain': 
+        return <TrueFalseExplainQuestion question={q} value={answers[q.id] || { choice: null, explanation: '' }} onChange={(v) => handleAnswerChange(q.id, v)} disabled={isChecked} />;
+      case 'matching': 
+        return <MatchingQuestion question={q} value={answers[q.id] || {}} onChange={(v) => handleAnswerChange(q.id, v)} disabled={isChecked} />;
+      case 'multiple_select': 
+        return <MultipleSelectQuestion question={q} value={answers[q.id] || []} onChange={(v) => handleAnswerChange(q.id, v)} disabled={isChecked} />;
+      case 'ordering': 
+        return <OrderingQuestion question={q} value={answers[q.id] || []} onChange={(v) => handleAnswerChange(q.id, v)} disabled={isChecked} />;
+      case 'true_false': 
+        return renderTrueFalse(q);
+      case 'short_answer': 
+        return renderShortAnswer(q);
       case 'multiple_choice': 
-      default: return renderMultipleChoice(q);
+      default: 
+        return renderMultipleChoice(q);
     }
   };
 

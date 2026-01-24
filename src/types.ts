@@ -30,7 +30,17 @@ export enum QuestionDifficulty {
 
 export type UserRole = 'admin' | 'user';
 
-export type QuestionType = 'multiple_choice' | 'true_false' | 'short_answer' | 'reading';
+export type QuestionType = 
+  | 'multiple_choice' 
+  | 'true_false' 
+  | 'short_answer' 
+  | 'reading'
+  | 'essay'
+  | 'fill_in_blank'
+  | 'true_false_explain'
+  | 'matching'
+  | 'multiple_select'
+  | 'ordering';
 
 export interface TrueFalseRow {
   id: string;
@@ -54,6 +64,7 @@ export interface Question {
   image?: string; // URL, base64, hoặc reference key (VD: "bank:img_01")
   requiresImage?: boolean; // Nếu true, bắt buộc phải có ảnh
   explanation: string;
+  explanationImage?: string; // URL or base64 for explanation visual
   category: QuestionCategory;
   difficulty?: QuestionDifficulty;
   tags?: string[];

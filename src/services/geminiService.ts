@@ -1,9 +1,11 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Exam, Question, QuestionCategory, ExamType } from "../types";
 import { generateId } from "./dbService";
+import { getCachedExplanation, cacheExplanation } from "./aiCacheService";
+import { getCachedExplanation, cacheExplanation } from "./aiCacheService";
 
 // Safe API Key Retrieval for Web Deployments
-const getApiKey = (): string | undefined => {
+export const getApiKey = (): string | undefined => {
   // Try to get from Vite's import.meta.env (build-time injection)
   // @ts-ignore
   const viteKey = import.meta.env?.VITE_GEMINI_API_KEY;
@@ -65,69 +67,117 @@ const getImagePart = async (imageUrl: string): Promise<any | null> => {
   return null;
 };
 
-export const streamAIExplanation = async (question: Question, onUpdate: (text: string) => void): Promise<void> => {
+export const streamAIExplanation = async (question: Question, onUpdate: (text: string) => void, maxRetries: number = 2): Promise<void> => {
+  try {
+    // 1️⃣ Kiểm tra cache trước
+    const cached = getCachedExplanation(question.id, question.text);
+    if (cached) {
+      onUpdate(cached);
+      return;
+    }
+
+    const apiKey = getApiKey();
+    if (!apiKey) {
+      // 🔄 Fallback: Dùng explanation từ file nếu có
+      if (question.explanation) {
+        const fallbackMsg = `📖 (Từ tài liệu gốc)\n\n${question.explanation}`;
+        onUpdate(fallbackMsg);
+        cacheExplanation(question.id, fallbackMsg);
+        return;
+      }
+
+      const errorMsg = "⚠️ Không thể kết nối AI. Vui lòng kiểm tra API Key hoặc thử lại sau.";
+      onUpdate(errorMsg);
+      console.error("API Key missing");
+      return;
+    }
+
+    // 2️⃣ Retry logic với exponential backoff
+    let lastError: any;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        await generateAIExplanation(question, onUpdate);
+        return;
+      } catch (error: any) {
+        lastError = error;
+        
+        // Nếu là lỗi rate limit hoặc timeout, retry
+        if ((error.message?.includes("429") || error.message?.includes("timeout")) && attempt < maxRetries) {
+          const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s...
+          console.warn(`⏳ Retry attempt ${attempt}/${maxRetries} after ${delay}ms`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+        
+        // Lỗi khác, sử dụng fallback
+        break;
+      }
+    }
+
+    // 3️⃣ Fallback: Dùng explanation từ file
+    if (question.explanation) {
+      const fallbackMsg = `📖 (Không thể kết nối AI)\n\n${question.explanation}`;
+      onUpdate(fallbackMsg);
+      cacheExplanation(question.id, fallbackMsg);
+    } else {
+      const errorMsg = "❌ Lỗi: Không thể lấy giải thích. Vui lòng thử lại sau.";
+      onUpdate(errorMsg);
+    }
+
+    console.error("All retry attempts failed:", lastError);
+  } catch (error) {
+    console.error("Unexpected error in streamAIExplanation:", error);
+    onUpdate("❌ Có lỗi xảy ra. Vui lòng thử lại.");
+  }
+};
+
+/**
+ * Hàm nội bộ để generate explanation từ AI
+ */
+const generateAIExplanation = async (question: Question, onUpdate: (text: string) => void): Promise<void> => {
   const apiKey = getApiKey();
-  if (!apiKey) {
-    const errorMsg = "Lỗi: Không tìm thấy API Key.\n\nNếu bạn đang deploy trên Vercel/Netlify:\n1. Vào Settings > Environment Variables.\n2. Thêm Key mới tên là 'VITE_API_KEY' với giá trị là mã Gemini của bạn.\n3. Redeploy lại ứng dụng.";
-    onUpdate(errorMsg);
-    console.error("API Key missing. Checked: import.meta.env.VITE_API_KEY and process.env.API_KEY");
-    return;
+  if (!apiKey) throw new Error("API key not found");
+
+  const ai = new GoogleGenAI({ apiKey });
+  
+  // 🎯 Tối ưu prompt: Giảm kích thước, tăng độ chính xác
+  const promptText = `Giải thích câu hỏi sau:
+
+Câu: ${question.text}
+
+${question.options ? `Đáp án: ${question.options.map((opt, i) => `${i}. ${opt}`).join(' | ')}` : ''}
+
+Đúng: ${question.correctIndex}
+
+Hãy giải thích ngắn gọn, dễ hiểu. Tiếng Việt.`;
+
+  const parts: any[] = [];
+  
+  // Nếu có hình ảnh, thêm vào
+  if (question.image) {
+    const imagePart = await getImagePart(question.image);
+    if (imagePart) parts.push(imagePart);
+  }
+  
+  parts.push({ text: promptText });
+
+  const responseStream = await ai.models.generateContentStream({
+    model: 'gemini-2-flash', // Nhanh hơn, chi phí thấp hơn
+    contents: { parts: parts },
+  });
+
+  let fullText = "";
+  for await (const chunk of responseStream) {
+    const text = chunk.text;
+    if (text) {
+      fullText += text;
+      onUpdate(fullText);
+    }
   }
 
-  try {
-    const ai = new GoogleGenAI({ apiKey });
-    
-    // Xây dựng prompt text
-    const promptText = `
-      Bạn là một giáo viên luyện thi TSA (Thinking Skills Assessment) chuyên nghiệp.
-      Hãy giải thích chi tiết câu hỏi sau đây và tại sao đáp án lại như vậy.
-      
-      Câu hỏi: ${question.text}
-      Các lựa chọn:
-      ${question.options?.map((opt, i) => `${i}. ${opt}`).join('\n') || ''}
-      
-      Đáp án đúng là chỉ số: ${question.correctIndex}
-      
-      Yêu cầu:
-      1. Nếu câu hỏi có hình ảnh đính kèm, hãy phân tích kỹ các chi tiết trong hình để đưa ra lập luận.
-      2. Phân tích logic của câu hỏi.
-      3. Giải thích tại sao đáp án đúng là chính xác.
-      4. Sử dụng giọng văn sư phạm, dễ hiểu, tiếng Việt.
-      5. Trả lời ngắn gọn, đi thẳng vào vấn đề.
-    `;
-
-    const parts: any[] = [];
-    if (question.image) {
-      const imagePart = await getImagePart(question.image);
-      if (imagePart) {
-        parts.push(imagePart);
-      }
-    }
-    parts.push({ text: promptText });
-
-    const responseStream = await ai.models.generateContentStream({
-      model: 'gemini-3-flash-preview',
-      contents: { parts: parts },
-      config: {
-        thinkingConfig: { thinkingBudget: 0 }
-      }
-    });
-
-    let fullText = "";
-    for await (const chunk of responseStream) {
-      const text = chunk.text;
-      if (text) {
-        fullText += text;
-        onUpdate(fullText);
-      }
-    }
-  } catch (error: any) {
-    console.error("Gemini Error:", error);
-    let msg = "Đã có lỗi xảy ra khi kết nối với AI Tutor.";
-    if (error.message?.includes("403") || error.message?.includes("API key")) {
-       msg = "Lỗi quyền truy cập (403): API Key không hợp lệ hoặc chưa được kích hoạt.";
-    }
-    onUpdate(msg);
+  // 💾 Lưu vào cache
+  if (fullText) {
+    cacheExplanation(question.id, fullText);
   }
 };
 
