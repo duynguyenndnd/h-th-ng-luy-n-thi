@@ -11,36 +11,36 @@ export const EvaluationCard: React.FC<EvaluationCardProps> = ({ score, totalScor
   const getEvaluation = (percent: number) => {
     if (percent >= 90) {
       return {
-        level: '🌟 PEAK PERFORMANCE 🌟',
+        level: '🌟 PEAK VCL EM ƠI  🌟',
         character: '😎',
         feedback: [
-          'Đỉnh quá! No cap, bạn là goat 🐐',
-          'Mạnh mẽ vl, bảo đảm W ✨',
-          'Kỹ năng đã max level rồi! 💯',
-          'Bro/Sis tuyệt vời quá, based!',
-          'Bạn deserve 1 tỷ follow 🎉'
+          'KHÔNG PHẢI HỌC NỮA EM ',
+          'ƯỚC GÌ TAO BỚT ĐẲNG CẤP 1 CHÚT   ✨',
+          'KHÔNG THỦ KHOA HƠI PHÍ! 💯',
+          'tuyệt đối điện ảnh !',
+          'cố lên em sắp thành vợ hứa quang hán rồi  🎉'
         ],
         color: 'from-yellow-400 to-orange-500'
       };
     } else if (percent >= 80) {
       return {
-        level: '💪 EXCELLENT 💪',
+        level: '💪 CŨNG CŨNG ĐI  💪',
         character: '🤩',
         feedback: [
-          'Quá tuyệt vời! Keep it up! 🔥',
-          'Ổn định vl bro, very slay 💅',
-          'Bạn đã làm rất tốt! Proud of you 👑',
-          'Chất lượng cao, deserves an A+ ⭐',
-          'Bạn là main character energy 🌈'
+          'CƯNG ƠI ! CŨNG ĐƯỢC ĐẤY CẢI THIỆN THÊM EM NHÉ 🔥',
+          'THÊM NỮA DI EM VẬY CHƯA ĐỦ💅',
+          'THIẾU ẢNH THÌ KỆ THIẾU ĐIỂM THÌ THUA DẤY 👑',
+          'EM KHÔNG THÍCH HƠN THUA MÀ , HƠN HẲN ĐI EM  ⭐',
+          'CỐ LÊN , KHÔNG HỨA QUANG HÁN NÓ LẤY VỢ MẤT  🌈'
         ],
         color: 'from-green-400 to-emerald-500'
       };
     } else if (percent >= 70) {
       return {
-        level: '👍 GOOD JOB 👍',
+        level: '👍 CŨNG ĐƯỢC  👍',
         character: '😊',
         feedback: [
-          'Ổn lắm! Tiếp tục cố gắng nhé 💪',
+          'Ổn lắm! cố em nhé  💪',
           'Tốt rồi, nhưng vẫn còn chỗ để cải thiện',
           'Bạn đang trên đúng con đường! 🚀',
           'Cách đây không xa là lập kỷ lục đâu! 🎯',
