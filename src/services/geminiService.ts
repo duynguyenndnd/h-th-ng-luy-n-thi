@@ -147,7 +147,7 @@ Hãy giải thích ngắn gọn, dễ hiểu. Tiếng Việt.`;
   parts.push({ text: promptText });
 
   const responseStream = await ai.models.generateContentStream({
-    model: 'gemini-2-flash', // Nhanh hơn, chi phí thấp hơn
+    model: 'gemini-1.5-flash', // Nhanh hơn, chi phí thấp hơn
     contents: { parts: parts },
   });
 
@@ -184,7 +184,7 @@ export const generateExamFromTopic = async (topic: string, userTags: string[] = 
     `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-1.5-flash',
       contents: prompt,
       config: {
         thinkingConfig: { thinkingBudget: 0 },
