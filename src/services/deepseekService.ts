@@ -101,8 +101,15 @@ Viết bằng tiếng Việt, dễ hiểu, phù hợp cho học sinh.
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`Deepseek API error: ${error.message || response.statusText}`);
+      const errorText = await response.text();
+      console.error("❌ Deepseek API Response Status:", response.status);
+      console.error("❌ Deepseek API Response Body:", errorText);
+      try {
+        const error = JSON.parse(errorText);
+        throw new Error(`Deepseek API error (${response.status}): ${error.message || error.error?.message || errorText}`);
+      } catch {
+        throw new Error(`Deepseek API error (${response.status}): ${errorText}`);
+      }
     }
 
     // 3️⃣ Stream response từ Deepseek
@@ -230,7 +237,10 @@ Trả lời CHỈ duy nhất 1 số từ 0-10 ở đầu, không giải thích.
     });
 
     if (!response.ok) {
-      throw new Error(`Deepseek scoring error: ${response.statusText}`);
+      const errorText = await response.text();
+      console.error("❌ Deepseek Scoring API Response Status:", response.status);
+      console.error("❌ Deepseek Scoring API Response Body:", errorText);
+      throw new Error(`Deepseek scoring error (${response.status}): ${errorText}`);
     }
 
     const data = await response.json();
