@@ -2,7 +2,6 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Exam, Question, QuestionCategory, ExamType } from "../types";
 import { generateId } from "./dbService";
 import { getCachedExplanation, cacheExplanation } from "./aiCacheService";
-import { streamDeepseekExplanation, scoreEssayWithDeepseek } from "./deepseekService";
 
 // Safe API Key Retrieval for Web Deployments
 export const getApiKey = (): string | undefined => {
@@ -99,19 +98,10 @@ export const streamAIExplanation = async (question: Question, onUpdate: (text: s
           }
         }
       }
-      console.log("❌ Gemini failed all attempts, trying Deepseek...");
+      console.log("❌ Gemini failed all attempts");
     }
 
-    // 3️⃣ Fallback to Deepseek
-    try {
-      console.log("🔄 Falling back to Deepseek...");
-      await streamDeepseekExplanation(question, onUpdate);
-      return;
-    } catch (deepseekError) {
-      console.error("❌ Deepseek also failed:", deepseekError);
-    }
-
-    // 4️⃣ Final fallback: Dùng explanation từ file
+    // 3️⃣ Final fallback: Dùng explanation từ file
     if (question.explanation) {
       const fallbackMsg = `📖 (AI không khả dụng)\n\n${question.explanation}`;
       onUpdate(fallbackMsg);
